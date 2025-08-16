@@ -1,4 +1,4 @@
-# social-media-sentiment-tracker/consumer/spark_streaming_job_fixed.py
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col, lower, udf, expr, current_timestamp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, FloatType
@@ -7,11 +7,11 @@ import logging
 import os
 import shutil
 
-# Set up logging
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize VADER sentiment analyzer
+
 analyzer = SentimentIntensityAnalyzer()
 
 def get_sentiment_score(text):
@@ -35,7 +35,7 @@ def get_sentiment_label(score):
     else:
         return "neutral"
 
-# Register UDFs
+
 sentiment_udf = udf(get_sentiment_score, FloatType())
 sentiment_label_udf = udf(get_sentiment_label, StringType())
 
@@ -68,11 +68,10 @@ def ensure_output_directories():
         logger.info(f"Ensured directory exists: {output_dir}")
 
 def main():
-    # Clean up old checkpoints to avoid conflicts
     clean_checkpoint_directories()
     ensure_output_directories()
     
-    # Create Spark Session with proper configurations
+    
     spark = SparkSession \
         .builder \
         .appName("SocialMediaSentimentTracker") \
@@ -89,7 +88,7 @@ def main():
     spark.sparkContext.setLogLevel("WARN")
     logger.info("Spark session created successfully")
 
-    # Define schema for the incoming JSON data
+    
     location_schema = StructType([
         StructField("city", StringType(), True),
         StructField("country", StringType(), True)
